@@ -5,7 +5,7 @@ A production-style serverless web application built using AWS Free Tier services
 📌 Live Demo
 
 🌐 Frontend (CloudFront HTTPS):
-https://<your-cloudfront-id>.cloudfront.net
+https://d30ko9r3gyio14.cloudfront.net/
 
 🧠 Project Overview
 
@@ -195,17 +195,6 @@ A billing budget and alerts are configured to avoid unexpected charges.
 
 * Frontend framework (React / Vue)
 
-📂 Project Structure
-.
-├── frontend
-│   ├── index.html
-│   └── script.js
-│
-├── backend
-│   └── lambda.js
-│
-├── architecture-diagram.png
-└── README.md
 
 🧠 Key Learnings
 
