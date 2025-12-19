@@ -4,7 +4,7 @@
 const API_URL =
   "https://ydql7dk3sg.execute-api.us-east-1.amazonaws.com/prod/todo";
 
-// 🔐 Cognito Login URL (REPLACE VALUES)
+// 🔐 Cognito Login URL
 const COGNITO_LOGIN_URL =
   "https://us-east-1vwyv2sz8d.auth.us-east-1.amazoncognito.com/login" +
   "?client_id=29ris85v67n4t2bd381aaid7hq" +
@@ -61,37 +61,72 @@ async function loadTodos() {
     const li = document.createElement("li");
 
     const text = document.createElement("span");
-    text.textContent = todo.task;
-    if (todo.completed) text.classList.add("completed");
+    text.textContent = todo.completed
+      ? `✅ ${todo.task}`
+      : todo.task;
 
     const actions = document.createElement("div");
     actions.className = "actions";
 
+    // ✏️ UPDATE BUTTON
+    const editBtn = document.createElement("button");
+    editBtn.textContent = "Edit";
+    editBtn.className = "edit-btn";
+    editBtn.onclick = () =>
+      updateTodo(todo.userId, todo.todoId, todo.task, todo.completed);
+
+    // ✅ DONE BUTTON
     const doneBtn = document.createElement("button");
     doneBtn.textContent = "Done";
     doneBtn.className = "done-btn";
     doneBtn.onclick = () =>
-      markDone(todo.userId, todo.todoId);
+      markDone(todo.userId, todo.todoId, todo.task);
 
+    // 🗑 DELETE BUTTON
     const deleteBtn = document.createElement("button");
     deleteBtn.textContent = "Delete";
     deleteBtn.className = "delete-btn";
     deleteBtn.onclick = () =>
       deleteTodo(todo.userId, todo.todoId);
 
-    actions.append(doneBtn, deleteBtn);
+    actions.append(editBtn, doneBtn, deleteBtn);
     li.append(text, actions);
     list.appendChild(li);
   });
 }
 
-async function markDone(userId, todoId) {
+/***********************
+ * UPDATE TASK TEXT
+ ***********************/
+async function updateTodo(userId, todoId, oldTask, completed) {
+  const newTask = prompt("Update task:", oldTask);
+  if (!newTask || newTask.trim() === "") return;
+
   await fetch(API_URL, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       userId,
       todoId,
+      task: newTask,
+      completed: completed
+    })
+  });
+
+  loadTodos();
+}
+
+/***********************
+ * MARK TASK AS DONE
+ ***********************/
+async function markDone(userId, todoId, task) {
+  await fetch(API_URL, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      userId,
+      todoId,
+      task: task,
       completed: true
     })
   });
@@ -99,6 +134,9 @@ async function markDone(userId, todoId) {
   loadTodos();
 }
 
+/***********************
+ * DELETE TASK
+ ***********************/
 async function deleteTodo(userId, todoId) {
   await fetch(API_URL, {
     method: "DELETE",
