@@ -6,7 +6,7 @@ phases:
       nodejs: 20
   pre_build:
     commands:
-      - cd backend
+      - cd Backend
       - npm install
   build:
     commands:
@@ -14,4 +14,4 @@ phases:
 
 artifacts:
   files:
-    - backend/lambda.zip
+    - Backend/lambda.zip
