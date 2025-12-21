@@ -1,0 +1,14 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Serverless Todo Lambda Infrastructure
+
+Resources:
+  TodoLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: TodoFunction
+      Runtime: nodejs20.x
+      Handler: lambda.handler
+      Role: arn:aws:iam::<331208495023>:role/lambda-role
+      Code:
+        S3Bucket: placeholder-bucket
+        S3Key: lambda.zip
