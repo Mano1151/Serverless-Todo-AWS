@@ -1,14 +1,34 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Serverless Todo Lambda Infrastructure
+Description: Serverless Todo App Infrastructure
 
 Resources:
+
+  TodoLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: todo-lambda-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
   TodoLambda:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: TodoFunction
+      FunctionName: todo-lambda
       Runtime: nodejs20.x
-      Handler: lambda.handler
-      Role: arn:aws:iam::<331208495023>:role/lambda-role
+      Handler: index.handler
+      Role: !GetAtt TodoLambdaRole.Arn
       Code:
-        S3Bucket: placeholder-bucket
-        S3Key: lambda.zip
+        ZipFile: |
+          exports.handler = async () => {
+            return {
+              statusCode: 200,
+              body: "Lambda deployed via CI/CD successfully"
+            };
+          }
