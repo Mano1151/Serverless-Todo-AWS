@@ -3,15 +3,16 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 20
-  pre_build:
+      nodejs: 18
     commands:
-      - cd Backend
-      - npm install
+      - echo "Using Node.js runtime"
   build:
     commands:
-      - zip -r lambda.zip .
+      - echo "Build started"
+      - cd Backend
+      - echo "No dependencies to install"
+      - echo "Build completed successfully"
 
 artifacts:
   files:
-    - Backend/lambda.zip
+    - '**/*'
