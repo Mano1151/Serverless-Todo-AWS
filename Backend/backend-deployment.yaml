@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: todo-backend
+  template:
+    metadata:
+      labels:
+        app: todo-backend
+    spec:
+      serviceAccountName: todo-backend-sa
+      containers:
+        - name: todo-backend
+          image: 331208495023.dkr.ecr.us-east-1.amazonaws.com/todo-backend:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: AWS_REGION
+              value: us-east-1
